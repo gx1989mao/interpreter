@@ -10,6 +10,8 @@ cc.Class({
         logicAction : [],    // list of call back action per logical engine frame
         frameNum : 0,
         refreshLock : false,
+
+        
     },
 
     update: function () {    
@@ -29,7 +31,7 @@ cc.Class({
     // run our engine, clear frame timer, refresh syntax tree 
     refreshTree: function () {
         this.frameNum = 0;
-        this.syntaxTree.push(["start","right","right","up"]);
+        this.syntaxTree.push(["start","right","left","up","down","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
         this.syntaxTree.push(["ontouch","left","right"]);
         this.syntaxTree.forEach(v=>{this.stepPoints.push(0);});              // reset step points to zero
     },
@@ -43,7 +45,7 @@ cc.Class({
         // for each tree
         for(var i=0; i<this.syntaxTree.length; i++){             
             // register entrances
-            if(this.syntaxTree[i][this.stepPoints[i]] === "start"            && this.stepPoints[i] === 0){
+            if(this.syntaxTree[i][this.stepPoints[i]]      === "start"       && this.stepPoints[i] === 0){
                 this.stepPoints[i]++;
             }
             else if(this.syntaxTree[i][this.stepPoints[i]] === "ontouch"     && this.stepPoints[i] === 0){
@@ -71,7 +73,24 @@ cc.Class({
     },
 
     phyEngine: function () {
-        cc.log(this.phyAction);
+        cc.log(this.phyAction);cc.log(this.node.x);cc.log(this.speed);
+        var speed       = 2.0;
+        var rotateSpeed = 2.0;
+        var scaleSpeed  = 0.01;
+        this.phyAction.forEach(v=>{
+            if(v === "right")       {this.node.x += speed}
+            if(v === "left")        {this.node.x -= speed}
+            if(v === "up")          {this.node.y += speed}
+            if(v === "down")        {this.node.y -= speed}
+            if(v === "turnleft")    {this.node.rotation += rotateSpeed}
+            if(v === "turnright")   {this.node.rotation -= rotateSpeed}
+            if(v === "jump")        {this.node.x -= speed}
+            if(v === "zoomin")      {this.node.scale += scaleSpeed}
+            if(v === "zoomout")     {this.node.scale -= scaleSpeed}
+            if(v === "restore")     {this.node.scale = 1}
+            if(v === "hide")        {this.node.opacity = 1}
+            if(v === "display")     {this.node.opacity = 255}
+        });
     },
     
 });

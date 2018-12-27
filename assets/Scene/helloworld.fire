@@ -378,8 +378,7 @@
     "node": {
       "__id__": 6
     },
-    "_enabled": true,
-    "runState": false
+    "_enabled": true
   },
   {
     "__type__": "cc.Node",
@@ -549,11 +548,16 @@
     },
     "_enabled": true,
     "syntaxTree": [],
+    "stepPoints": [],
     "hideFlag": false,
     "logicTimer": 30,
     "phyAction": [],
     "logicAction": [],
-    "frameNum": 0
+    "frameNum": 0,
+    "refreshLock": false,
+    "speed": 40,
+    "rotateSpeed": 20,
+    "scaleSpeed": 0.01
   },
   {
     "__type__": "cc.Canvas",
@@ -578,7 +582,6 @@
     "node": {
       "__id__": 2
     },
-    "_enabled": true,
-    "runState": false
+    "_enabled": true
   }
 ]
