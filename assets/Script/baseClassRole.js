@@ -2,13 +2,20 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        syntaxTree : [],     // when green-flag button is pressed, syntaxTree refresh 
-        stepPoints : [],
-        logicTimer : 30,     // per 30 frames logic engine run once 
-        phyAction : [],      // list of action per physical engine frame
-        logicAction : [],    // list of call back action per logical engine frame
-        frameNum : 0,
-        refreshLock : false,
+        syntaxTree    : [],     // when green-flag button is pressed, syntaxTree refresh 
+        // start ontouch oncollision onrx
+        // right left up down turnleft turnright jump
+        // say zoomin zoomout restore hide display
+        // sound playrecord
+        // delay countloop (number) loop loopend pause
+        // terminate toscene (number)
+        stepPoints    : [],
+        logicTimer    : 30,     // per 30 frames logic engine run once 
+        phyAction     : [],     // list of action per physical engine frame
+        logicAction   : [],     // list of call back action per logical engine frame
+        frameNum      :  0,
+        refreshLock   : false,
+        logicEngineSW : true,
 
         ox: 0,
         oy: 0,
@@ -22,72 +29,69 @@ cc.Class({
         this.os = this.node.scale;
         this.or = this.node.rotation;
     },
-    
+
     update: function () {    
-        if(Global.runState){
+        if(Global.runState){                                     // green flag button press down
             if(!this.refreshLock){
-                this.refreshTree();                     // refresh syntax tree once
+                this.frameNum = 0;
+                this.refreshTree();                              // refresh syntax tree once
                 this.refreshLock = true;
             }         
-            if(this.frameNum % this.logicTimer === 0)
-                this.logicEngine();                     // run logical engine per 30 frame 
-            this.phyEngine();                           // run physical engine per frame
+            if(this.frameNum % this.logicTimer === 0){
+                this.phyAction = [];                             // refresh phyaction
+                if(this.logicEngineSW){this.logicEngine()}       // run logical engine per 30 frame 
+            }
+            this.phyEngine();                                    // run physical engine per frame
         }else{
-            this.initState();
+            this.initState();                                    // green flag button up
         }
-        this.frameNum ++;
+        this.frameNum ++;                                        // frame counting
     },
 
     initState: function () {    
-        this.syntaxTree = [];
-        this.stepPoints = [];
-        this.phyAction = [];
+        this.syntaxTree  = [];
+        this.stepPoints  = [];
+        this.phyAction   = [];
         this.logicAction = [];
         this.refreshLock = false;  
+        this.logicEngineSW = true;
         this.node.x = this.ox;
         this.node.y = this.oy;
         this.node.scale = this.os;
         this.node.rotation = this.or;   
     },
     // run our engine, clear frame timer, refresh syntax tree 
-    refreshTree: function () {
-        this.frameNum = 0;
-        this.syntaxTree.push(["start","jump","right","right","up","down","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
+    refreshTree: function () {  
+        this.syntaxTree.push(["start","right","left","right","left","pause","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
         this.syntaxTree.push(["ontouch","left","right"]);
-        this.syntaxTree.forEach(v=>{this.stepPoints.push(0)});              // reset step points to zero
+        this.syntaxTree.push(["start","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout"]);
+        this.syntaxTree.forEach(v=>{this.stepPoints.push(0)});               // reset step points to zero
     },
 
-    logicEngine: function () {     
-        this.phyAction = [];                                                 // refresh phyaction
-        this.logicEngineStep();                                              // one step of logic engine       
-    },
-
-    logicEngineStep: function () {
-        // for each tree
-        for(var i=0; i<this.syntaxTree.length; i++){             
-            // register entrances
-            if(this.syntaxTree[i][this.stepPoints[i]]      === "start"       && this.stepPoints[i] === 0){
-                this.stepPoints[i]++;
-            }
-            else if(this.syntaxTree[i][this.stepPoints[i]] === "ontouch"     && this.stepPoints[i] === 0){
-                if("ontouch" in this.logicAction)
+    logicEngine: function () {    
+        for(var i=0; i<this.syntaxTree.length; i++){                         // for each tree                   
+            if(this.stepPoints[i] === 0){                                    // register entrances
+                if(this.syntaxTree[i][this.stepPoints[i]] === "start")
                     this.stepPoints[i]++;
-            }
-            else if(this.syntaxTree[i][this.stepPoints[i]] === "oncollision" && this.stepPoints[i] === 0){
-                if("oncollision" in this.logicAction)
-                    this.stepPoints[i]++;
-            }
-            else if(this.syntaxTree[i][this.stepPoints[i]] === "onRx"        && this.stepPoints[i] === 0){
-                if("onRx" in this.logicAction)
-                    this.stepPoints[i]++;
-            }
-            // alread entered, run!
-            else if(this.stepPoints[i] !== 0){
+                if(this.syntaxTree[i][this.stepPoints[i]] === "ontouch")
+                    if("ontouch" in this.logicAction)
+                        this.stepPoints[i]++;
+                if(this.syntaxTree[i][this.stepPoints[i]] === "oncollision")
+                    if("oncollision" in this.logicAction)
+                        this.stepPoints[i]++;
+                if(this.syntaxTree[i][this.stepPoints[i]] === "onrx")
+                    if("onrx" in this.logicAction)
+                        this.stepPoints[i]++;
+            }else{                                                           // already entry this tree, just run
                 if(this.stepPoints[i] < this.syntaxTree[i].length){          // if not point to the last one
-                    var action = this.syntaxTree[i][this.stepPoints[i]];
-                    this.phyAction.push(action);
-                    this.stepPoints[i]++;
-                }            
+                    var action = this.syntaxTree[i][this.stepPoints[i]];     // read one step action from this syntax tree
+                    if(action === "pause"){this.logicEngineSW = false}       // switch off logical engine "pause" stop this role
+                    else if(action === "terminate"){}
+                    else{
+                        this.phyAction.push(action);
+                        this.stepPoints[i]++;
+                    }                  
+                }
             }
         };
     },
@@ -113,6 +117,7 @@ cc.Class({
             if(v === "hide")        {this.node.opacity = 1}
             if(v === "display")     {this.node.opacity = 255}
             if(v === "jump")        {this.node.y += (jumpV - (this.frameNum % this.logicTimer)*gravity)}
+            if(v === "delay")       {cc.log("delay")}
         });
     },
     
