@@ -1,3 +1,7 @@
+window.Global = {
+    TF: false,
+};
+
 cc.Class({
     extends: cc.Component,
 
@@ -59,10 +63,11 @@ cc.Class({
         this.node.y = this.oy;
         this.node.scale = this.os;
         this.node.rotation = this.or;   
+        Global.TF = false;
     },
     // run our engine, clear frame timer, refresh syntax tree 
     refreshTree: function () {  
-        this.syntaxTree.push(["start","right","left","right","left","pause","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
+        this.syntaxTree.push(["start","right","left","right","left","terminate","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
         this.syntaxTree.push(["ontouch","left","right"]);
         this.syntaxTree.push(["start","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout"]);
         this.syntaxTree.forEach(v=>{this.stepPoints.push(0)});               // reset step points to zero
@@ -86,7 +91,10 @@ cc.Class({
                 if(this.stepPoints[i] < this.syntaxTree[i].length){          // if not point to the last one
                     var action = this.syntaxTree[i][this.stepPoints[i]];     // read one step action from this syntax tree
                     if(action === "pause"){this.logicEngineSW = false}       // switch off logical engine "pause" stop this role
-                    else if(action === "terminate"){}
+                    else if(action === "terminate"){
+                        this.logicEngineSW = false;
+                        Global.TF = true;
+                    }
                     else{
                         this.phyAction.push(action);
                         this.stepPoints[i]++;

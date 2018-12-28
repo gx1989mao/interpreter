@@ -261,17 +261,17 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 195,
-      "height": 270
+      "width": 60,
+      "height": 64
     },
     "_rotationX": 0,
     "_rotationY": 0,
-    "_scaleX": 0.5,
-    "_scaleY": 0.5,
+    "_scaleX": 1,
+    "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 429,
-      "y": 252
+      "x": 402,
+      "y": 261
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -289,7 +289,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "31bc895a-c003-4566-a9f3-2e54ae1c17dc"
+      "__uuid__": "926eeb7c-a120-46ac-b250-5bcf93ca0134"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -304,7 +304,9 @@
     "_isTrimmedMode": true,
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_atlas": null
+    "_atlas": {
+      "__uuid__": "b62847cb-d7e0-407f-80c0-b77e8dfa23dd"
+    }
   },
   {
     "__type__": "cc.Button",
@@ -378,7 +380,8 @@
     "node": {
       "__id__": 6
     },
-    "_enabled": true
+    "_enabled": true,
+    "buttonPress": false
   },
   {
     "__type__": "cc.Node",
@@ -549,15 +552,16 @@
     "_enabled": true,
     "syntaxTree": [],
     "stepPoints": [],
-    "hideFlag": false,
     "logicTimer": 30,
     "phyAction": [],
     "logicAction": [],
     "frameNum": 0,
     "refreshLock": false,
-    "speed": 40,
-    "rotateSpeed": 20,
-    "scaleSpeed": 0.01
+    "logicEngineSW": true,
+    "ox": 0,
+    "oy": 0,
+    "os": 0,
+    "or": 0
   },
   {
     "__type__": "cc.Canvas",
@@ -582,6 +586,7 @@
     "node": {
       "__id__": 2
     },
-    "_enabled": true
+    "_enabled": true,
+    "buttonPress": false
   }
 ]

@@ -1,23 +1,35 @@
 window.Global = {
     runState: false,
-    terminateState: false,
 };
 cc.Class({
     extends: cc.Component,
 
+    properties: {
+        buttonPress: false,
+    },
+    
     update: function () {
-        if(Global.terminateState){
-            Global.terminateState = false;
-            this.onButtonClick();
+        if(this.buttonPress){
+            this.buttonPress = false;
+            this.switchButton(Global.runState);
+            Global.runState = !Global.runState;
+        }
+        if(Global.TF){
+            this.switchButton(Global.runState);
+            Global.runState = !Global.runState;
+            Global.TF = false;
         }
     },
-    onButtonClick: function () {
-        var self = this;    
+    onButtonClick: function () {this.buttonPress = true;cc.log("press");},   // button click call back
+
+    switchButton: function (state) {      // button press process  false: switch run   ture: switch stop
+        //var self = this;    
         var name;
-        if(Global.runState){name = "HelloWorld";cc.log("off");}else{name = "dod";cc.log("on");} 
-        Global.runState = !Global.runState;
-        cc.loader.loadRes(name, cc.SpriteFrame, function (err, spriteFrame) {
-            self.node.getComponent(cc.Sprite).spriteFrame = spriteFrame;
+        if(state){name = "run";  cc.log("off state");}
+        else     {name = "stop"; cc.log("on  state");}       
+        cc.loader.loadRes("gf", cc.SpriteAtlas, function (err, atlas) {
+            var frame = atlas.getSpriteFrame(name);
+            cc.find("Canvas/greenFlag").getComponent(cc.Sprite).spriteFrame = frame;
         });
     },
 });
