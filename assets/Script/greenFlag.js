@@ -22,8 +22,7 @@ cc.Class({
     },
     onButtonClick: function () {this.buttonPress = true;cc.log("press");},   // button click call back
 
-    switchButton: function (state) {      // button press process  false: switch run   ture: switch stop
-        //var self = this;    
+    switchButton: function (state) {      // button press process  false: switch run   ture: switch stop 
         var name;
         if(state){name = "run";  cc.log("off state");}
         else     {name = "stop"; cc.log("on  state");}       
