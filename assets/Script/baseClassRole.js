@@ -11,7 +11,7 @@ cc.Class({
         // right left up down turnleft turnright jump
         // say zoomin zoomout restore hide display
         // sound playrecord
-        // delay countloop (number) loop loopend pause
+        // delay loop(number>0 or -1) loopend pause
         // terminate toscene (number)
         stepPoints    : [],
         logicTimer    : 30,     // per 30 frames logic engine run once 
@@ -21,12 +21,11 @@ cc.Class({
         refreshLock   : false,
         logicEngineSW : true,   // switch of logical engine
         loopMarks     : [],     // stack of all loops in all trees
+        loopCount     : [],     // record of loop count
         ox: 0,
         oy: 0,
         os: 0,
         or: 0,
-
-        
     },
 
     onLoad: function (){
@@ -69,52 +68,75 @@ cc.Class({
     },
     // run our engine, clear frame timer, refresh syntax tree 
     refreshTree: function () {  
-        this.syntaxTree.push(["start","right","left","right","left","terminate","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
-        this.syntaxTree.push(["ontouch","left","right"]);
-        this.syntaxTree.push(["start","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout"]);
+        // this.syntaxTree.push(["start","right","left","right","left","terminate","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
+        //this.syntaxTree.push(["ontouch","left","right"]);
+        //this.syntaxTree.push(["start","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout"]);
+        this.syntaxTree.push(["start","loop","3","left","right","loopend"]);
         this.syntaxTree.forEach(v=>{                                         
             this.stepPoints.push(0);                                         // reset step points to zero
             this.loopMarks.push([]);                                         // push empty list into loopMarks
+            this.loopCount.push([]);                                         // push empty list into loopCount
         });               
     },
 
     logicEngine: function () {    
-        for(var i=0; i<this.syntaxTree.length; i++){                         // for each tree                   
-            if(this.stepPoints[i] === 0){                                    // register entrances
-                if(this.syntaxTree[i][this.stepPoints[i]] === "start")
-                    this.stepPoints[i]++;
-                if(this.syntaxTree[i][this.stepPoints[i]] === "ontouch")
-                    if("ontouch" in this.logicAction)
-                        this.stepPoints[i]++;
-                if(this.syntaxTree[i][this.stepPoints[i]] === "oncollision")
-                    if("oncollision" in this.logicAction)
-                        this.stepPoints[i]++;
-                if(this.syntaxTree[i][this.stepPoints[i]] === "onrx")
-                    if("onrx" in this.logicAction)
-                        this.stepPoints[i]++;
-            }else{                                                           // already entry this tree, just run
-                if(this.stepPoints[i] < this.syntaxTree[i].length){          // if not point to the last one
-                    var action = this.syntaxTree[i][this.stepPoints[i]];     // read one step action from this syntax tree                  
-                    var loops = ["countloop","loop","loopend"];          
-                    if(action === "pause"){this.logicEngineSW = false}       // switch off logical engine "pause" stop this role
-                    else if(action === "terminate"){
-                        this.logicEngineSW = false;
-                        Global.TF = true;
-                    }
-                    else if(!(action in loops || /\d/.test(action))){        // not a kind of loop, not a number
-                        this.phyAction.push(action);                         // push a phy action
-                        this.stepPoints[i]++;
-                    }       
-                    else if(action === "loop"){
-                        this.loopMarks[i].push(this.stepPoints[i]);          // record a loop start position
-                    }           
-                }
+        for(var i=0; i<this.syntaxTree.length; i++){                         // for each tree  
+            if(this.stepPoints[i] === 0){
+                var block = this.syntaxTree[i][this.stepPoints[i]];          // check entrance
+                if(block === "start" || block in this.logicAction){          // start or callback entrance
+                    this.stepPoints[i]++;                                    // manually point to next
+                    this.logicStep(i);                                       // check next block
+                }                                                            // without entrance stepPoint = 0 forever
+            }else{
+                this.logicStep(i);
             }
         };
     },
 
+    logicStep: function (i) {
+        if(this.stepPoints[i] < this.syntaxTree[i].length){
+            while(this.syntaxTree[i][this.stepPoints[i]] === "loop"){        // find continuous loop-num block
+                this.stepPoints[i]++;  
+                var Num = this.syntaxTree[i][this.stepPoints[i]];
+                this.loopCount[i].push(parseInt(Num));                       // push loop count number
+                this.stepPoints[i]++; 
+                this.loopMarks[i].push(this.stepPoints[i]);                  // push point     
+            }
+            if(this.syntaxTree[i][this.stepPoints[i]] === "loopend"){
+                //cc.log("loopend"+this.loopCount[i]);
+                var loopN = this.loopCount[i].pop();
+                cc.log(loopN);
+                if(loopN > 0){                                                       // loop running
+                    this.loopCount[i].push(loopN-1);
+                    this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
+                }else if(loopN === 0){                                               // loop end
+                    this.loopCount[i].pop();
+                    this.loopMarks[i].pop();
+                    this.stepPoints[i]++;
+                }else if(loopN === -1){                                              // infinte loop
+                    this.loopCount[i].push(loopN);
+                    this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
+                }
+            }
+            var action = this.syntaxTree[i][this.stepPoints[i]];
+            if(action === "pause"){this.logicEngineSW = false;return action;}// switch off logical engine "pause" stop this role
+            else if(action === "terminate"){                                 // change global TF to terminate all scripts
+                this.logicEngineSW = false;
+                Global.TF = true;
+                return action;
+            }
+            else if(action !== "loop" && action !== "loopend"){              // not a kind of loop
+                this.phyAction.push(action);                                 // normal block just run !!!
+                this.stepPoints[i]++;
+                return action;
+            }          
+        }         
+        else
+            return "NA";
+    },
+
     phyEngine: function () {
-        cc.log(this.phyAction);
+        //cc.log(this.phyAction);
         var speed       =  2.0;
         var rotateSpeed =  2.0;
         var scaleSpeed  = 0.01;
