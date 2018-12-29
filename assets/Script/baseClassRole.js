@@ -29,11 +29,21 @@ cc.Class({
     },
 
     onLoad: function (){
+        this.keepPosi();
+        cc.game.setFrameRate(60);
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
+            var delta = event.touch.getDelta();     
+            this.node.x += delta.x;
+            this.node.y += delta.y;
+            this.keepPosi();
+        }, this);
+    },
+
+    keepPosi: function () {
         this.ox = this.node.x;
         this.oy = this.node.y;
         this.os = this.node.scale;
         this.or = this.node.rotation;
-        cc.game.setFrameRate(60);
     },
 
     update: function () {    
