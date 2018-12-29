@@ -71,7 +71,7 @@ cc.Class({
         // this.syntaxTree.push(["start","right","left","right","left","terminate","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
         //this.syntaxTree.push(["ontouch","left","right"]);
         //this.syntaxTree.push(["start","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout"]);
-        this.syntaxTree.push(["start","loop","3","left","right","loopend"]);
+        this.syntaxTree.push(["start","loop","2","loop","2","left","right","loopend","loopend"]);
         this.syntaxTree.forEach(v=>{                                         
             this.stepPoints.push(0);                                         // reset step points to zero
             this.loopMarks.push([]);                                         // push empty list into loopMarks
@@ -102,18 +102,20 @@ cc.Class({
                 this.stepPoints[i]++; 
                 this.loopMarks[i].push(this.stepPoints[i]);                  // push point     
             }
-            if(this.syntaxTree[i][this.stepPoints[i]] === "loopend"){
-                //cc.log("loopend"+this.loopCount[i]);
+            while(this.syntaxTree[i][this.stepPoints[i]] === "loopend"){
+                cc.log("loop end count"+this.loopCount[i]+" mark"+this.loopMarks[i]);
                 var loopN = this.loopCount[i].pop();
-                cc.log(loopN);
-                if(loopN > 0){                                                       // loop running
+                //cc.log(loopN);
+                if(loopN > 1){                                               // loop running
+                    cc.log("loop > 1");
                     this.loopCount[i].push(loopN-1);
                     this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
-                }else if(loopN === 0){                                               // loop end
-                    this.loopCount[i].pop();
+                }else if(loopN === 1){                                       // loop end
+                    cc.log("loop = 1");
                     this.loopMarks[i].pop();
                     this.stepPoints[i]++;
-                }else if(loopN === -1){                                              // infinte loop
+                }else if(loopN === -1){                                      // infinte loop
+                    cc.log("loop infinte");
                     this.loopCount[i].push(loopN);
                     this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
                 }
@@ -136,7 +138,7 @@ cc.Class({
     },
 
     phyEngine: function () {
-        //cc.log(this.phyAction);
+        cc.log(this.phyAction);
         var speed       =  2.0;
         var rotateSpeed =  2.0;
         var scaleSpeed  = 0.01;
