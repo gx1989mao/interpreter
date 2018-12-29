@@ -71,7 +71,7 @@ cc.Class({
         // this.syntaxTree.push(["start","right","left","right","left","terminate","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
         //this.syntaxTree.push(["ontouch","left","right"]);
         //this.syntaxTree.push(["start","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout"]);
-        this.syntaxTree.push(["start","loop","2","loop","2","left","right","loopend","loopend"]);
+        this.syntaxTree.push(["start","loop","2","loop","2","left","right","loopend","jump","loopend"]);
         this.syntaxTree.forEach(v=>{                                         
             this.stepPoints.push(0);                                         // reset step points to zero
             this.loopMarks.push([]);                                         // push empty list into loopMarks
@@ -95,46 +95,56 @@ cc.Class({
 
     logicStep: function (i) {
         if(this.stepPoints[i] < this.syntaxTree[i].length){
-            while(this.syntaxTree[i][this.stepPoints[i]] === "loop"){        // find continuous loop-num block
-                this.stepPoints[i]++;  
-                var Num = this.syntaxTree[i][this.stepPoints[i]];
-                this.loopCount[i].push(parseInt(Num));                       // push loop count number
-                this.stepPoints[i]++; 
-                this.loopMarks[i].push(this.stepPoints[i]);                  // push point     
-            }
-            while(this.syntaxTree[i][this.stepPoints[i]] === "loopend"){
-                cc.log("loop end count"+this.loopCount[i]+" mark"+this.loopMarks[i]);
-                var loopN = this.loopCount[i].pop();
-                //cc.log(loopN);
-                if(loopN > 1){                                               // loop running
-                    cc.log("loop > 1");
-                    this.loopCount[i].push(loopN-1);
-                    this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
-                }else if(loopN === 1){                                       // loop end
-                    cc.log("loop = 1");
-                    this.loopMarks[i].pop();
-                    this.stepPoints[i]++;
-                }else if(loopN === -1){                                      // infinte loop
-                    cc.log("loop infinte");
-                    this.loopCount[i].push(loopN);
-                    this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
-                }
-            }
-            var action = this.syntaxTree[i][this.stepPoints[i]];
-            if(action === "pause"){this.logicEngineSW = false;return action;}// switch off logical engine "pause" stop this role
-            else if(action === "terminate"){                                 // change global TF to terminate all scripts
-                this.logicEngineSW = false;
-                Global.TF = true;
-                return action;
-            }
-            else if(action !== "loop" && action !== "loopend"){              // not a kind of loop
-                this.phyAction.push(action);                                 // normal block just run !!!
-                this.stepPoints[i]++;
-                return action;
-            }          
+            do{
+                this.loopPros(i);
+                this.loopEndPros(i);
+            }while(this.syntaxTree[i][this.stepPoints[i]] === "loop")
+            this.blockPros(i);                   
         }         
-        else
-            return "NA";
+    },
+
+    loopPros: function (i) {
+        while(this.syntaxTree[i][this.stepPoints[i]] === "loop"){            // find continuous loop-num block
+            this.stepPoints[i]++;  
+            var Num = this.syntaxTree[i][this.stepPoints[i]];
+            this.loopCount[i].push(parseInt(Num));                           // push loop count number
+            this.stepPoints[i]++; 
+            this.loopMarks[i].push(this.stepPoints[i]);                      // push point     
+        }
+    },
+
+    loopEndPros: function (i) {
+        while(this.syntaxTree[i][this.stepPoints[i]] === "loopend"){
+            cc.log("loop end count"+this.loopCount[i]+" mark"+this.loopMarks[i]);
+            var loopN = this.loopCount[i].pop();
+            //cc.log(loopN);
+            if(loopN > 1){                                                   // loop running
+                cc.log("loop > 1");
+                this.loopCount[i].push(loopN-1);
+                this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
+            }else if(loopN === 1){                                           // loop end
+                cc.log("loop = 1");
+                this.loopMarks[i].pop();
+                this.stepPoints[i]++;
+            }else if(loopN === -1){                                          // infinte loop
+                cc.log("loop infinte");
+                this.loopCount[i].push(loopN);
+                this.stepPoints[i] = this.loopMarks[i][this.loopMarks[i].length-1];
+            }
+        }
+    },
+
+    blockPros: function (i) {
+        var action = this.syntaxTree[i][this.stepPoints[i]];
+        if(action === "pause"){this.logicEngineSW = false}                   // switch off logical engine "pause" stop this role
+        else if(action === "terminate"){                                     // change global TF to terminate all scripts
+            this.logicEngineSW = false;
+            Global.TF = true;
+        }
+        else if(action !== "loop" && action !== "loopend"){                  // not a kind of loop
+            this.phyAction.push(action);                                     // normal block just run !!!
+            this.stepPoints[i]++;
+        } 
     },
 
     phyEngine: function () {
