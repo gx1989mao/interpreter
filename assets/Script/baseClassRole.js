@@ -33,6 +33,7 @@ cc.Class({
         this.oy = this.node.y;
         this.os = this.node.scale;
         this.or = this.node.rotation;
+        cc.game.setFrameRate(60);
     },
 
     update: function () {    
@@ -71,7 +72,7 @@ cc.Class({
         // this.syntaxTree.push(["start","right","left","right","left","terminate","turnleft","turnright","zoomin","zoomout","restore","hide","display"]);
         //this.syntaxTree.push(["ontouch","left","right"]);
         //this.syntaxTree.push(["start","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout","zoomin","zoomout"]);
-        this.syntaxTree.push(["start","loop","2","loop","2","left","right","loopend","jump","loopend"]);
+        this.syntaxTree.push(["start","loop","2","loop","2","left","right","loopend","jump","loopend","loop","3","jump","loopend"]);
         this.syntaxTree.forEach(v=>{                                         
             this.stepPoints.push(0);                                         // reset step points to zero
             this.loopMarks.push([]);                                         // push empty list into loopMarks
@@ -98,7 +99,7 @@ cc.Class({
             do{
                 this.loopPros(i);
                 this.loopEndPros(i);
-            }while(this.syntaxTree[i][this.stepPoints[i]] === "loop")
+            }while(this.syntaxTree[i][this.stepPoints[i]] === "loop")        // if loopend jump to a loop, need do loopPros again
             this.blockPros(i);                   
         }         
     },
