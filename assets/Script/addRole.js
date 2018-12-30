@@ -1,3 +1,7 @@
+// window.Global = {
+//     roleNum: 0,
+// };
+
 cc.Class({
     extends: cc.Component,
 
@@ -16,9 +20,19 @@ cc.Class({
         },
     },
 
+    onload: function () {
+        Global.roleNum = 1;
+    },
     addRolePros: function () {
-        cc.instantiate(this.roleButton).parent = cc.find("Canvas/roleContainer/rolePanel");
-        cc.instantiate(this.blockPanel).parent = cc.find("Canvas/blockContainer/blockPanel");
-        cc.instantiate(this.role).parent = cc.find("Canvas/stage");
+        Global.roleNum++;
+        var roleB = cc.instantiate(this.roleButton);
+        roleB.name = String(Global.roleNum);
+        roleB.parent = cc.find("Canvas/roleContainer/rolePanel");
+        var blockP = cc.instantiate(this.blockPanel)
+        blockP.name = String(Global.roleNum);
+        blockP.parent = cc.find("Canvas/blockContainer/blockPanel");
+        var role = cc.instantiate(this.role)
+        role.name = String(Global.roleNum);
+        role.parent = cc.find("Canvas/stage");
     },
 });
