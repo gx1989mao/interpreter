@@ -29,6 +29,7 @@ cc.Class({
     },
 
     onLoad: function (){
+        
         this.keepPosi();
         cc.game.setFrameRate(60);
         this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
