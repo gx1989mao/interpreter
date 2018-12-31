@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "role",
+    "_name": "rolePrefab",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -53,8 +53,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -329,
-      "y": -11
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -118,7 +118,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "e591b843-692e-41a6-8a2d-0a65c124ffd5"
     },
     "fileId": "efpuwFex1Ng7bw08V1AH/j",
     "sync": false

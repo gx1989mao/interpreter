@@ -1,6 +1,3 @@
-// window.Global = {
-//     roleNum: 0,
-// };
 
 cc.Class({
     extends: cc.Component,
@@ -34,5 +31,12 @@ cc.Class({
         var role = cc.instantiate(this.role)
         role.name = String(Global.roleNum);
         role.parent = cc.find("Canvas/stage");
+
+        cc.log("after "+role.x+" "+role.y);
     },
+
+    // randomNum: function (a,b) {
+    //     var r = cc.random0To1();
+    //     return a+r*(b-a);
+    // },
 });

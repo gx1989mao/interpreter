@@ -29,7 +29,8 @@ cc.Class({
     },
 
     onLoad: function (){
-        
+        this.node.x = this.randomNum(-300,300);
+        this.node.y = this.randomNum(-150,150);
         this.keepPosi();
         cc.game.setFrameRate(60);
         this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
@@ -38,6 +39,11 @@ cc.Class({
             this.node.y += delta.y;
             this.keepPosi();
         }, this);
+    },
+
+    randomNum: function (a,b) {
+        var r = cc.random0To1();
+        return a+r*(b-a);
     },
 
     keepPosi: function () {
