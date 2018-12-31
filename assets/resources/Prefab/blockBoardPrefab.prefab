@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "blockPanel",
+    "_name": "0",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -53,8 +53,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 337.3265270132067,
-      "y": -223.72005084805488
+      "x": 340,
+      "y": -250
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -72,7 +72,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "953ad62b-396c-432f-9f01-639a2a493acc"
+      "__uuid__": "ae3b0f95-244f-437f-9667-b0e3a072c703"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -121,7 +121,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "da3e3b07-a619-40c8-9073-0bd312cdc4c7"
     },
     "fileId": "44lKHFvONP7b8mpuU+k0Qs",
     "sync": false

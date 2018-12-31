@@ -484,12 +484,13 @@
     "roleButton": {
       "__uuid__": "82ab4b8d-1918-4c20-a1dc-9b55dc4b0838"
     },
-    "blockPanel": {
+    "blockBoard": {
       "__uuid__": "da3e3b07-a619-40c8-9073-0bd312cdc4c7"
     },
     "role": {
       "__uuid__": "e591b843-692e-41a6-8a2d-0a65c124ffd5"
-    }
+    },
+    "roleNum": 0
   },
   {
     "__type__": "cc.Button",
@@ -617,7 +618,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "rolePrefab",
+    "_name": "0",
     "_objFlags": 0,
     "_parent": {
       "__id__": 16
@@ -909,7 +910,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "roleButtonPrefab",
+    "_name": "0",
     "_objFlags": 0,
     "_parent": {
       "__id__": 24
@@ -1305,8 +1306,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -2,
-      "y": 7
+      "x": 0,
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -1317,7 +1318,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "blockPanelPrefab",
+    "_name": "0",
     "_objFlags": 0,
     "_parent": {
       "__id__": 37
@@ -1381,7 +1382,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "953ad62b-396c-432f-9f01-639a2a493acc"
+      "__uuid__": "ae3b0f95-244f-437f-9667-b0e3a072c703"
     },
     "_type": 0,
     "_sizeMode": 0,

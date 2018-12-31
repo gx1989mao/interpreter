@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "roleButtonPrefab",
+    "_name": "0",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -59,7 +59,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -259.5,
+      "x": 10,
       "y": 0
     },
     "_skewX": 0,
@@ -106,7 +106,7 @@
     "isAlignOnce": true,
     "_target": null,
     "_alignFlags": 10,
-    "_left": 0,
+    "_left": 20,
     "_right": 0,
     "_top": 0,
     "_bottom": 0,

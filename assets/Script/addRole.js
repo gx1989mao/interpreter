@@ -1,3 +1,7 @@
+window.Gblock = {
+    blockNow: "0",
+};
+
 
 cc.Class({
     extends: cc.Component,
@@ -7,7 +11,7 @@ cc.Class({
             default: null, 
             type: cc.Prefab, 
         },
-        blockPanel: {
+        blockBoard: {
             default: null,
             type: cc.Prefab,
         },
@@ -15,28 +19,25 @@ cc.Class({
             default: null,
             type: cc.Prefab,
         },
+        roleNum: {
+            default: 0,
+        },
     },
 
-    onload: function () {
-        Global.roleNum = 1;
-    },
+
     addRolePros: function () {
-        Global.roleNum++;
+        this.roleNum++;
         var roleB = cc.instantiate(this.roleButton);
-        roleB.name = String(Global.roleNum);
+        roleB.name = String(this.roleNum);
         roleB.parent = cc.find("Canvas/roleContainer/rolePanel");
-        var blockP = cc.instantiate(this.blockPanel)
-        blockP.name = String(Global.roleNum);
-        blockP.parent = cc.find("Canvas/blockContainer/blockPanel");
+
+        var blockB = cc.instantiate(this.blockBoard)
+        blockB.name = String(this.roleNum);
+        blockB.active = false;
+        blockB.parent = cc.find("Canvas/blockContainer/blockPanel");
+
         var role = cc.instantiate(this.role)
-        role.name = String(Global.roleNum);
+        role.name = String(this.roleNum);
         role.parent = cc.find("Canvas/stage");
-
-        cc.log("after "+role.x+" "+role.y);
     },
-
-    // randomNum: function (a,b) {
-    //     var r = cc.random0To1();
-    //     return a+r*(b-a);
-    // },
 });

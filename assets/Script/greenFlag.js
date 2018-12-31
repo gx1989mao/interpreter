@@ -1,6 +1,5 @@
 window.Global = {
     runState: false,
-    roleNum: 0,
 };
 cc.Class({
     extends: cc.Component,
