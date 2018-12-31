@@ -38,6 +38,6 @@ cc.Class({
 
         var role = cc.instantiate(this.role)
         role.name = String(this.roleNum);
-        role.parent = cc.find("Canvas/stage");
+        role.parent = cc.find("Canvas/stageMask/stage");
     },
 });
