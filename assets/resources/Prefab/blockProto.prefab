@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "block",
+    "_name": "blockProto",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -22,10 +22,13 @@
       },
       {
         "__id__": 3
+      },
+      {
+        "__id__": 4
       }
     ],
     "_prefab": {
-      "__id__": 4
+      "__id__": 5
     },
     "_id": "",
     "_opacity": 255,
@@ -54,7 +57,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 0
+      "y": 5
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -92,15 +95,68 @@
     }
   },
   {
-    "__type__": "bd59a+DHPNEf5AgL3TorG9i",
+    "__type__": "df6e5eRRmlFSa91jpH17/QP",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "connecter": null,
-    "ender": null
+    "block": {
+      "__uuid__": "9fd3e871-33ca-4108-b97c-e0f9b88ac774"
+    }
+  },
+  {
+    "__type__": "cc.Button",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "transition": 3,
+    "pressedColor": {
+      "__type__": "cc.Color",
+      "r": 211,
+      "g": 211,
+      "b": 211,
+      "a": 255
+    },
+    "hoverColor": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "duration": 0.1,
+    "zoomScale": 1.2,
+    "clickEvents": [],
+    "_N$interactable": true,
+    "_N$enableAutoGrayEffect": false,
+    "_N$normalColor": {
+      "__type__": "cc.Color",
+      "r": 214,
+      "g": 214,
+      "b": 214,
+      "a": 255
+    },
+    "_N$disabledColor": {
+      "__type__": "cc.Color",
+      "r": 124,
+      "g": 124,
+      "b": 124,
+      "a": 255
+    },
+    "_N$normalSprite": null,
+    "_N$pressedSprite": null,
+    "pressedSprite": null,
+    "_N$hoverSprite": null,
+    "hoverSprite": null,
+    "_N$disabledSprite": null,
+    "_N$target": {
+      "__id__": 1
+    }
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -108,9 +164,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "9fd3e871-33ca-4108-b97c-e0f9b88ac774"
+      "__uuid__": "523c2dd0-96da-4d6a-b45c-ec501677d0f3"
     },
-    "fileId": "1cjiXRZBJFe7k3fS6KrEob",
+    "fileId": "25i3+Hyo5G/5MS5ZjZkUQ1",
     "sync": false
   }
 ]

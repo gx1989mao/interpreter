@@ -7,7 +7,7 @@ cc.Class({
 
     properties:{
         sortNow: "entrance",
-        block:{
+        blockProto:{
             default: null, 
             type: cc.Prefab, 
         },
@@ -38,7 +38,7 @@ cc.Class({
     },
 
     initblock: function(s) {
-        cc.log(s);
+        //cc.log(s);
         var children = this.node.children;
         children.forEach(v=>{v.destroy()});
 
@@ -57,10 +57,12 @@ cc.Class({
     },
 
     initOneBlock: function(name) {
-        var b = cc.instantiate(this.block);
+        var b = cc.instantiate(this.blockProto);
         b.name = name;
-        // var frame = b.getComponent(cc.Sprite).atlas.getSpriteFrame(b11.name);
-        // b.getComponent(cc.Sprite).spriteFrame = frame;
+        cc.loader.loadRes("blocks", cc.SpriteAtlas, function (err, atlas) {
+            var frame = atlas.getSpriteFrame(name);
+            b.getComponent(cc.Sprite).spriteFrame = frame;
+        });
         b.parent = this.node;
     }
 });
